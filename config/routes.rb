@@ -18,10 +18,13 @@ Rails.application.routes.draw do
     end
     resources :ai, module: :settings, only: %i[edit update]
 
-    resources :users
+    resources :users do
+      get 'select_user_search', on: :collection
+    end
     resources :products do
       get 'edit_custom_attributes', on: :member
       patch 'update_custom_attributes', on: :member
+      get 'select_product_search', on: :collection
     end
     resources :contacts do
       get 'search', to: 'contacts#search', on: :collection
@@ -66,12 +69,8 @@ Rails.application.routes.draw do
       get 'edit_custom_attributes'
       patch 'update_custom_attributes'
     end
-    resources :deal_products, only: %i[destroy new create] do
-      get 'select_product_search', on: :collection
-    end
-    resources :deal_assignees, only: %i[destroy new create] do
-      get 'select_user_search', on: :collection
-    end
+    resources :deal_products, only: %i[destroy new create]
+    resources :deal_assignees, only: %i[destroy new create]
 
     namespace :apps do
       resources :evolution_apis do
