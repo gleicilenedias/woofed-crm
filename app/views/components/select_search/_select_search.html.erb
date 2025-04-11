@@ -14,7 +14,7 @@
   <!-- Dropdown menu -->
   <div id="dropdownSearch" class="hidden bg-white rounded-lg shadow w-full z-40">
     <div class="p-3">
-      <%= form_tag select_search_url, method: :get, data: { turbo_frame: "select_#{model_name}_resuts", action: 'input->select-search#submit', 'select-search-target': 'searchForms' } do | f | %>
+      <%= form_tag select_search_url, method: :get, data: { turbo_frame: "select_#{model_name}_results", action: 'input->select-search#submit', 'select-search-target': 'searchForms' } do | f | %>
         <% request.query_parameters.each do |key, value| %>
           <%= hidden_field_tag key, value %>
         <% end %>
@@ -29,7 +29,7 @@
         </div>
       <% end %>
     </div>
-    <%= turbo_frame_tag "select_#{model_name}_resuts" do %>
+    <%= turbo_frame_tag "select_#{model_name}_results" do %>
       <ul class="max-h-80 py-2 overflow-y-auto text-gray-700 dark:text-gray-300" aria-labelledby="dropdownUsersButton">
         <% items.each do | item |%>
           <%= render "select_#{model_name}_search_#{model_name}", model: item %>
