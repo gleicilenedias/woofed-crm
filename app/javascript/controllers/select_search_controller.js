@@ -44,10 +44,6 @@ export default class extends Controller {
           mutation.type === "childList" ||
           mutation.type === "characterData"
         ) {
-          console.log(
-            "Conteúdo da div modelName mudou:",
-            this.modelNameTarget.innerText
-          );
           this.handleModelNameChange();
         }
       });
