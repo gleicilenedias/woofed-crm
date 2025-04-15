@@ -4,6 +4,10 @@ import debounce from "debounce";
 export default class extends Controller {
   static targets = ["modelId", "modelName", "dropdown", "searchForms"];
 
+  connect() {
+    this.observeModelNameChanges();
+  }
+
   initialize() {
     this.submit = debounce(this.submit.bind(this), 300);
   }
@@ -31,5 +35,31 @@ export default class extends Controller {
         submitButton.classList.add("hidden");
       }
     }
+  }
+  observeModelNameChanges() {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "childList" ||
+          mutation.type === "characterData"
+        ) {
+          console.log(
+            "Conteúdo da div modelName mudou:",
+            this.modelNameTarget.innerText
+          );
+          this.handleModelNameChange();
+        }
+      });
+    });
+
+    observer.observe(this.modelNameTarget, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+  }
+
+  handleModelNameChange() {
+    this.toggleSubmitButtonVisibility();
   }
 }
