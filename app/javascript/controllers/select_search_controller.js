@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.observeModelNameChanges();
+    this.setDropdownId();
   }
 
   initialize() {
@@ -57,6 +58,17 @@ export default class extends Controller {
       characterData: true,
       subtree: true,
     });
+  }
+
+  setDropdownId() {
+    const dropdownSearchId = `dropdownSearch-${Math.random()
+      .toString(36)
+      .substr(2, 8)}`;
+
+    let dropdownSearchElement = this.dropdownTarget.nextElementSibling;
+
+    this.dropdownTarget.setAttribute("data-dropdown-toggle", dropdownSearchId);
+    dropdownSearchElement.id = dropdownSearchId;
   }
 
   handleModelNameChange() {
