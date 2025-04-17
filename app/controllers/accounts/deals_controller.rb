@@ -93,7 +93,10 @@ class Accounts::DealsController < InternalController
   def update
     @stages = @deal.pipeline.stages
     if @deal.update(deal_params)
-      redirect_to account_deal_path(current_user.account, @deal)
+      respond_to do |format|
+        format.html { redirect_to account_deal_path(current_user.account, @deal) }
+        format.turbo_stream
+      end
     else
       render :edit, status: :unprocessable_entity
     end
