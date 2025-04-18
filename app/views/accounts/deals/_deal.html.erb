@@ -28,7 +28,7 @@
     <%= deal.contact&.full_name %>
   </td>
   <td class="pr-4 py-2.5 typography-body-r-lh150 text-dark-gray-palette-p2 max-w-[280px] truncate">
-    <%= deal.creator.full_name %>
+    <%= deal.creator&.full_name %>
   </td>
   <td class="pr-4 py-2.5 typography-body-r-lh150 text-dark-gray-palette-p2 max-w-[250px] truncate">
     <%= l(deal.created_at, format: :long) %>
