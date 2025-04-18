@@ -8,7 +8,22 @@ class Accounts::DealsController < InternalController
 
   # GET /deals or /deals.json
   def index
-    @deals = current_user.account.deals
+    @first_pipeline = Pipeline.first
+    @deals = if params[:query].present?
+              Deal.left_joins(:contact)
+                  .where(
+                    'deals.name ILIKE :search OR ' +
+                    'contacts.full_name ILIKE :search OR ' +
+                    'deals.id = :id',
+                    search: "%#{params[:query]}%",
+                    id: params[:query].to_i
+                  )
+                  .order(updated_at: :desc)
+              else
+                Deal.all.order(created_at: :desc)
+              end
+
+    @pagy, @deals = pagy(@deals)
   end
 
   # GET /deals/1 or /deals/1.json
@@ -106,6 +121,7 @@ class Accounts::DealsController < InternalController
   def destroy
     @deal.destroy
     respond_to do |format|
+      format.turbo_stream
       format.html { redirect_to root_path, notice: t('flash_messages.deleted', model: Deal.model_name.human) }
       format.json { head :no_content }
     end
