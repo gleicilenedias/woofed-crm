@@ -226,6 +226,9 @@
   .color-bg-feedback-success-harder {
     @apply bg-green-500;
   }
+  .color-bg-feedback-neutral {
+    @apply bg-gray-200;
+  }
 
   .color-bg-feedback-danger-default {
     @apply bg-red-100;
@@ -262,6 +265,7 @@
   .color-fg-feedback-success {
     @apply text-green-500;
   }
+
   .color-fg-feedback-danger {
     @apply text-red-500;
   }
@@ -283,8 +287,11 @@
   .color-border-default {
     @apply border-gray-300;
   }
-  .color-border-feedback-success {
+  .color-border-feedback-success-default {
     @apply border-green-300;
+  }
+  .color-border-feedback-success-harder {
+    @apply border-green-500;
   }
   .color-border-feedback-danger-default {
     @apply border-red-200;
