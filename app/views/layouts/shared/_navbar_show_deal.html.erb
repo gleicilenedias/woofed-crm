@@ -24,9 +24,10 @@
     <% if @deal.open? %>
       <%= link_to(
     t('views.layouts.shared.navbar_deal.delete'),
-    account_deal_path(current_user.account, @deal),
+    account_deal_path(current_user.account, @deal, format: :html),
     method: :delete,
-    data: { confirm: t('views.layouts.shared.navbar_deal.are_you_sure?') },
+    data: { confirm: t('views.layouts.shared.navbar_deal.are_you_sure?'),
+    turbo: false },
     class: 'btn-secondary') %>
       <%= link_to(
     t('views.layouts.shared.navbar_deal.lost'),
