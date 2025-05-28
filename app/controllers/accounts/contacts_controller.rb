@@ -81,7 +81,7 @@ class Accounts::ContactsController < InternalController
     if @contact.update(contact_params)
       flash[:notice] = t('flash_messages.updated', model: Contact.model_name.human)
       respond_to do |format|
-        format.html { account_contact_path(current_user.account, @contact) }
+        format.html { redirect_to account_contact_path(current_user.account, @contact) }
         format.turbo_stream
       end
     else
