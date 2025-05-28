@@ -31,11 +31,13 @@ class Contact < ApplicationRecord
 
   validates :email, allow_blank: true, uniqueness: { case_sensitive: false },
                     format: { with: Devise.email_regexp,
-                              message: I18n.t('activerecord.errors.contact.email.invalid', locale: I18n.locale) }, unless: :skip_validation
+                              message: I18n.t('activerecord.errors.contact.email.invalid',
+                                              locale: I18n.locale) }, unless: :skip_validation
 
   validates :phone, allow_blank: true, uniqueness: true,
                     format: { with: /\+[1-9]\d{1,14}\z/,
-                              message: I18n.t('activerecord.errors.contact.phone.invalid', locale: I18n.locale) }, unless: :skip_validation
+                              message: I18n.t('activerecord.errors.contact.phone.invalid',
+                                              locale: I18n.locale) }, unless: :skip_validation
 
   has_many :deals, dependent: :destroy
   belongs_to :app, polymorphic: true, optional: true
@@ -56,7 +58,7 @@ class Contact < ApplicationRecord
                   deal_page_overview_details: %i[full_name email phone label_list
                                                  chatwoot_conversations_label_list] }.freeze
 
-  after_commit :export_contact_to_chatwoot, on: %i[create update]
+  after_commit :export_contact_to_chatwoot, on: %i[create update], unless: :skip_validation
 
   def phone=(value)
     value = "+#{value}" if value.present? && !value.start_with?('+')
@@ -66,8 +68,8 @@ class Contact < ApplicationRecord
   ## Events
 
   include Wisper::Publisher
-  after_commit :publish_created, on: :create
-  after_commit :publish_updated, on: :update
+  after_commit :publish_created, on: :create, unless: :skip_validation
+  after_commit :publish_updated, on: :update, unless: :skip_validation
 
   private
 
