@@ -39,9 +39,17 @@ RSpec.describe Accounts::Apps::ChatwootsController, type: :request do
       end
     end
     context 'when is authenticated user' do
+      let(:profile_response) do
+        File.read('spec/fixtures/models/apps/chatwoot/api_client/profile_administrator_request.json')
+      end
+      let(:request_headers) { { 'Content-Type' => 'application/json' } }
+
       before do
+        stub_request(:get, %r{api/v1/profile})
+          .to_return(status: 200, body: profile_response, headers: { 'Content-Type' => 'application/json' })
         sign_in(user)
       end
+
       it 'create app chatwoots' do
         expect do
           post "/accounts/#{account.id}/apps/chatwoots", params: valid_params
@@ -54,7 +62,7 @@ RSpec.describe Accounts::Apps::ChatwootsController, type: :request do
           post "/accounts/#{account.id}/apps/chatwoots", params: invalid_params
         end.to change(Apps::Chatwoot, :count).by(0)
         expect(response).to have_http_status(200)
-        expect(response.body).to include('Chatwoot URL Invalid chatwoot configuration')
+        expect(response.body).to include('Chatwoot user token is invalid')
       end
     end
   end
