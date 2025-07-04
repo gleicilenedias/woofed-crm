@@ -10,7 +10,7 @@ class Accounts::EventsController < InternalController
 
     render json: events.map { |event| {
       id: event.id,
-      title: event.title,
+      title: "#{event.title} - #{event.contact.full_name}",
       start: event.scheduled_at.iso8601,
       backgroundColor: events_kind_color(event.kind),
       borderColor: events_kind_color(event.kind),

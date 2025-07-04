@@ -82,7 +82,7 @@ RSpec.describe Accounts::EventsController, type: :request do
           event_json = json.first
 
           expect(event_json['id']).to eq(event_activity.id)
-          expect(event_json['title']).to eq(event_activity.title)
+          expect(event_json['title']).to eq("#{event_activity.title} - #{event_activity.contact.full_name}")
           expect(event_json['start']).to eq(event_activity.scheduled_at.iso8601)
           expect(event_json['backgroundColor']).to eq('#6857D9')
           expect(event_json['borderColor']).to eq('#6857D9')
