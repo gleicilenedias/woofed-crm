@@ -20,6 +20,7 @@ export default class extends Controller {
   connect() {
     this.configureLocaleTexts();
     this.calendar = new Calendar(this.calendarTarget, {
+      timeZone: "local",
       navLinks: true,
       allDaySlot: false,
       nowIndicator: true,
