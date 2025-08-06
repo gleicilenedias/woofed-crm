@@ -12,6 +12,7 @@ import * as ActiveStorage from "@rails/activestorage";
 import "channels";
 import "controllers";
 import lucide from "lucide/dist/umd/lucide";
+import { setBrowserTimezoneCookie } from "../utils/set_browser_timezone_cookie";
 
 Rails.start();
 ActiveStorage.start();
@@ -64,3 +65,5 @@ function initLibraries() {
     }
   }
 }
+
+setBrowserTimezoneCookie();
