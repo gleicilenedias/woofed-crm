@@ -1,4 +1,5 @@
-<%= turbo_stream.update 'modal', '' %>
-<%= turbo_stream.replace dom_id(@stage) do %>
-  <%= render partial: '/accounts/pipelines/stage', locals: {stage: @stage, status: 'open'} %>
-<% end%>
+<%= turbo_stream.replace dom_id(Event) do %>
+  <div class="flex justify-center text-center p-5">
+    <%= t('activerecord.models.other') %>: <%= @result.count %>
+  </div>
+<% end %>
