@@ -1,8 +1,0 @@
-<%= turbo_stream.replace :modal do %>
-  <%= render 'components/overlays/modal', title: t('views.accounts.pipelines.import.import_deals', stage_name: @stage.name), width_class: 'max-w-2xl' do %>
-    <!-- Modal body -->
-    <div class='border-t color-border-default'>
-      <%= render partial: 'form_import_deals' %>
-    </div>
-  <% end %>
-<% end %>

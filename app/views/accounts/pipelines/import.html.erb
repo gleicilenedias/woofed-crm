@@ -1,21 +1,6 @@
-<section class="section">
-  <div class="section-header">
-    <h1>
-      <%= t('views.accounts.pipelines.import.import_deals', stage_name: @stage.name) %>
-    </h1>
+  <%= render 'components/overlays/modal', title: t('views.accounts.pipelines.import.import_deals', stage_name: @stage.name), width_class: 'max-w-2xl' do %>
+  <!-- Modal body -->
+  <div class='border-t color-border-default'>
+    <%= render partial: 'form_import_deals' %>
   </div>
-  <div class="section-body">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-body offset-2 col-sm-8">
-          <%= render 'form_import_deals'%>
-          <div class="text-center pt-5">
-            <%= link_to account_pipeline_path(Current.account, params['pipeline_id'] , stage_id: params['stage_id']), class:"mt-4" do %>
-              Voltar
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<% end %>
