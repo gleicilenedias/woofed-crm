@@ -368,6 +368,104 @@ RSpec.describe Accounts::UsersController, type: :request do
           get "/accounts/#{account.id}/users/select_user_search"
           expect(response).to have_http_status(:success)
         end
+
+        context 'when there is query parameter' do
+          it 'should return user' do
+            get "/accounts/#{account.id}/users/select_user_search?query=#{user.full_name}"
+            expect(response).to have_http_status(200)
+
+            html = Nokogiri::HTML(response.body)
+            user_list_frame = html.at_css('turbo-frame#select_user_results').text
+            expect(user_list_frame).to include(user.full_name)
+          end
+
+          context 'when query parameter is not found' do
+            it 'should return 0 users' do
+              get "/accounts/#{account.id}/users/select_user_search", params: { query: 'testdsfsdf' }
+              expect(response).to have_http_status(200)
+
+              html = Nokogiri::HTML(response.body)
+              user_list_frame = html.at_css('turbo-frame#select_user_results').text
+              expect(user_list_frame).not_to include(user.full_name)
+              expect(user_list_frame.strip.empty?).to be_truthy
+            end
+          end
+        end
+
+        context 'when there is a form_name parameter' do
+          it 'should render form_name as hidden_field_name on html form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: { form_name: 'deal[user_id]' }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('deal[user_id]')
+          end
+        end
+
+        context 'when there is no form_name parameter' do
+          it 'should not render a specific hidden_field_name on html form' do
+            get "/accounts/#{account.id}/users/select_user_search"
+
+            expect(response).to have_http_status(200)
+            expect(response.body).not_to include('deal[user_id]')
+          end
+        end
+
+        context 'when there is a content_value parameter' do
+          it 'should render content_value as selected_model_name on html form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: { content_value: 'user_name_test' }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('user_name_test')
+            expect(response.body).not_to include('Search user')
+          end
+        end
+
+        context 'when there is no content_value parameter' do
+          it 'should render the default search placeholder instead of a selected name' do
+            get "/accounts/#{account.id}/users/select_user_search"
+
+            expect(response).to have_http_status(200)
+            expect(response.body).not_to include('user_name_test')
+            expect(response.body).to include('Search user')
+          end
+        end
+
+        context 'when there is a form_id parameter' do
+          it 'should render form_id as hidden_field_value on html form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: { form_id: '101563597' }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('value="101563597"')
+          end
+        end
+
+        context 'when there is no form_id parameter' do
+          it 'should not render a specific id in the hidden field' do
+            get "/accounts/#{account.id}/users/select_user_search"
+            expect(response).to have_http_status(200)
+            expect(response.body).not_to include('value="101563597"')
+          end
+        end
+
+        context 'when all parameters are present' do
+          it 'should render all parameters correctly in the HTML form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: {
+                  form_name: 'deal_assignee[user_id]',
+                  content_value: 'user_name_test',
+                  form_id: '101'
+                }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('deal_assignee[user_id]')
+            expect(response.body).to include('user_name_test')
+            expect(response.body).to include('value="101"')
+            expect(response.body).not_to include('Search user')
+          end
+        end
       end
     end
   end
