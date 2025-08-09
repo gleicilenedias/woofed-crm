@@ -2,7 +2,14 @@ class Accounts::UsersController < InternalController
   before_action :set_user, only: %i[edit update destroy]
 
   def index
-    @users = current_user.account.users
+    @users = if params[:query].present?
+              User.where(
+                'full_name ILIKE :search OR email ILIKE :search OR phone ILIKE :search', search: "%#{params[:query]}%"
+              ).order(updated_at: :desc)
+             else
+              User.all.order(created_at: :desc)
+             end
+
     @pagy, @users = pagy(@users)
   end
 

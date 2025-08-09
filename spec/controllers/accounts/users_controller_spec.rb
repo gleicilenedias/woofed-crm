@@ -28,6 +28,109 @@ RSpec.describe Accounts::UsersController, type: :request do
         expect(response).to have_http_status(:success)
         expect(flash[:error]).to be_nil
       end
+
+      context 'when query params are present' do
+        context 'when query params match with user full_name' do
+          it 'returns users on users table' do
+            get "/accounts/#{account.id}/users", params: { query: user.full_name }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params match with user email' do
+          it 'returns users on users table' do
+            get "/accounts/#{account.id}/users", params: { query: user.email }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params match with user phone' do
+          it 'returns users on users table' do
+            get "/accounts/#{account.id}/users", params: { query: user.phone }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params match partially with user full_name' do
+          let(:first_name) { user.full_name.split.first }
+          it 'returns users with partial match' do
+            get "/accounts/#{account.id}/users", params: { query: first_name }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params are case-insensitive' do
+          it 'returns users regardless of case' do
+            get "/accounts/#{account.id}/users", params: { query: user.full_name.swapcase }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params do not match any users' do
+          it 'returns an empty users table' do
+            get "/accounts/#{account.id}/users", params: { query: 'Nonexistentuser123' }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).not_to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).not_to include(user.email)
+            expect(table_body).not_to include(user.phone)
+          end
+        end
+
+        context 'when there are multiple users and query does not match any' do
+          let!(:user2) do
+            create(:user, full_name: 'Jane Smith', email: 'jane.smith@example.com',
+                          phone: '+55226598745699')
+          end
+          let!(:user3) do
+            create(:user, full_name: 'Bob Johnson', email: 'bob.johnson@example.com',
+                          phone: '+5541225695285')
+          end
+
+          it 'returns an empty users table' do
+            get "/accounts/#{account.id}/users", params: { query: 'Nonexistentuser123' }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).not_to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).not_to include(ERB::Util.html_escape(user2.full_name))
+            expect(table_body).not_to include(ERB::Util.html_escape(user3.full_name))
+          end
+        end
+      end
     end
   end
 
@@ -264,6 +367,104 @@ RSpec.describe Accounts::UsersController, type: :request do
         it 'renders search component' do
           get "/accounts/#{account.id}/users/select_user_search"
           expect(response).to have_http_status(:success)
+        end
+
+        context 'when there is query parameter' do
+          it 'should return user' do
+            get "/accounts/#{account.id}/users/select_user_search?query=#{user.full_name}"
+            expect(response).to have_http_status(200)
+
+            html = Nokogiri::HTML(response.body)
+            user_list_frame = html.at_css('turbo-frame#select_user_results').text
+            expect(user_list_frame).to include(user.full_name)
+          end
+
+          context 'when query parameter is not found' do
+            it 'should return 0 users' do
+              get "/accounts/#{account.id}/users/select_user_search", params: { query: 'testdsfsdf' }
+              expect(response).to have_http_status(200)
+
+              html = Nokogiri::HTML(response.body)
+              user_list_frame = html.at_css('turbo-frame#select_user_results').text
+              expect(user_list_frame).not_to include(user.full_name)
+              expect(user_list_frame.strip.empty?).to be_truthy
+            end
+          end
+        end
+
+        context 'when there is a form_name parameter' do
+          it 'should render form_name as hidden_field_name on html form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: { form_name: 'deal[user_id]' }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('deal[user_id]')
+          end
+        end
+
+        context 'when there is no form_name parameter' do
+          it 'should not render a specific hidden_field_name on html form' do
+            get "/accounts/#{account.id}/users/select_user_search"
+
+            expect(response).to have_http_status(200)
+            expect(response.body).not_to include('deal[user_id]')
+          end
+        end
+
+        context 'when there is a content_value parameter' do
+          it 'should render content_value as selected_model_name on html form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: { content_value: 'user_name_test' }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('user_name_test')
+            expect(response.body).not_to include('Search user')
+          end
+        end
+
+        context 'when there is no content_value parameter' do
+          it 'should render the default search placeholder instead of a selected name' do
+            get "/accounts/#{account.id}/users/select_user_search"
+
+            expect(response).to have_http_status(200)
+            expect(response.body).not_to include('user_name_test')
+            expect(response.body).to include('Search user')
+          end
+        end
+
+        context 'when there is a form_id parameter' do
+          it 'should render form_id as hidden_field_value on html form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: { form_id: '101563597' }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('value="101563597"')
+          end
+        end
+
+        context 'when there is no form_id parameter' do
+          it 'should not render a specific id in the hidden field' do
+            get "/accounts/#{account.id}/users/select_user_search"
+            expect(response).to have_http_status(200)
+            expect(response.body).not_to include('value="101563597"')
+          end
+        end
+
+        context 'when all parameters are present' do
+          it 'should render all parameters correctly in the HTML form' do
+            get "/accounts/#{account.id}/users/select_user_search",
+                params: {
+                  form_name: 'deal_assignee[user_id]',
+                  content_value: 'user_name_test',
+                  form_id: '101'
+                }
+
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('deal_assignee[user_id]')
+            expect(response.body).to include('user_name_test')
+            expect(response.body).to include('value="101"')
+            expect(response.body).not_to include('Search user')
+          end
         end
       end
     end
