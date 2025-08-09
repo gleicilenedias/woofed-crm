@@ -28,6 +28,109 @@ RSpec.describe Accounts::UsersController, type: :request do
         expect(response).to have_http_status(:success)
         expect(flash[:error]).to be_nil
       end
+
+      context 'when query params are present' do
+        context 'when query params match with user full_name' do
+          it 'returns users on users table' do
+            get "/accounts/#{account.id}/users", params: { query: user.full_name }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params match with user email' do
+          it 'returns users on users table' do
+            get "/accounts/#{account.id}/users", params: { query: user.email }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params match with user phone' do
+          it 'returns users on users table' do
+            get "/accounts/#{account.id}/users", params: { query: user.phone }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params match partially with user full_name' do
+          let(:first_name) { user.full_name.split.first }
+          it 'returns users with partial match' do
+            get "/accounts/#{account.id}/users", params: { query: first_name }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params are case-insensitive' do
+          it 'returns users regardless of case' do
+            get "/accounts/#{account.id}/users", params: { query: user.full_name.swapcase }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).to include(user.email)
+            expect(table_body).to include(user.phone)
+          end
+        end
+
+        context 'when query params do not match any users' do
+          it 'returns an empty users table' do
+            get "/accounts/#{account.id}/users", params: { query: 'Nonexistentuser123' }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).not_to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).not_to include(user.email)
+            expect(table_body).not_to include(user.phone)
+          end
+        end
+
+        context 'when there are multiple users and query does not match any' do
+          let!(:user2) do
+            create(:user, full_name: 'Jane Smith', email: 'jane.smith@example.com',
+                          phone: '+55226598745699')
+          end
+          let!(:user3) do
+            create(:user, full_name: 'Bob Johnson', email: 'bob.johnson@example.com',
+                          phone: '+5541225695285')
+          end
+
+          it 'returns an empty users table' do
+            get "/accounts/#{account.id}/users", params: { query: 'Nonexistentuser123' }
+            expect(response).to have_http_status(200)
+            expect(response.body).to include('Users')
+            doc = Nokogiri::HTML(response.body)
+            table_body = doc.at_css('tbody#users__index_user').text
+            expect(table_body).not_to include(ERB::Util.html_escape(user.full_name))
+            expect(table_body).not_to include(ERB::Util.html_escape(user2.full_name))
+            expect(table_body).not_to include(ERB::Util.html_escape(user3.full_name))
+          end
+        end
+      end
     end
   end
 
