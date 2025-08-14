@@ -32,8 +32,9 @@
 #
 FactoryBot.define do
   factory :deal do
-    stage
-    contact
+    stage { association :stage }
+    contact { association :contact }
+    pipeline { association :pipeline }
     name { 'Deal 1' }
     trait :won do
       status { 'won' }
