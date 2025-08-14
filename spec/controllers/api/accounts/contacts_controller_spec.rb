@@ -170,6 +170,15 @@ RSpec.describe 'Contacts API', type: :request do
         expect(result['data']).to be_empty
       end
 
+      it 'return all contacts when query params is blank' do
+        params = { query: {  } }.to_json
+
+        post("/api/v1/accounts/#{account.id}/contacts/search", params:, headers: auth_headers)
+        expect(response).to have_http_status(:ok)
+        result = JSON.parse(response.body)
+        expect(result['data'].size).to eq(Contact.count)
+      end
+
       context 'when searching by phone with 9 digits' do
         let!(:contact_1) { create(:contact, account:, phone: '+5511999999999') }
         let!(:contact_2) { create(:contact, account:, phone: '+551199999999') }
