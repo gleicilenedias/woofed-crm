@@ -160,6 +160,15 @@ RSpec.describe 'Products API', type: :request do
         end
       end
 
+      it 'return all products when query params is blank' do
+        params = { query: {} }.to_json
+
+        post("/api/v1/accounts/#{account.id}/products/search", params:, headers: auth_headers)
+        expect(response).to have_http_status(:ok)
+        result = JSON.parse(response.body)
+        expect(result['data'].size).to eq(Product.count)
+      end
+
       context 'when params is invalid' do
         context 'when there is no ransack prefix to contact params' do
           it 'should raise an error' do
