@@ -1,4 +1,4 @@
-<% tooltip_id = dom_id(@contact, "#{SecureRandom.hex(3)}_chatwoot_conversation_link_info_tooltip") %>
+<% tooltip_id = dom_id(@contact, "#{@contact.object_id}_chatwoot_conversation_link_info_tooltip") %>
 <%= turbo_frame_tag dom_id(@contact, :chatwoot_conversation_link) do  %>
   <div id=<%= tooltip_id %> role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
     <% if @connection_error %>
