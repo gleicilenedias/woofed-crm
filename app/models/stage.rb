@@ -18,7 +18,6 @@
 #  fk_rails_...  (pipeline_id => pipelines.id)
 #
 class Stage < ApplicationRecord
-  include Stage::Presenters
   include Stage::Decorators
   belongs_to :pipeline
   acts_as_list scope: :pipeline
