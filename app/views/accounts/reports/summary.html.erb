@@ -7,9 +7,7 @@
             <%= summary[:title] %>
           </h1>
         </div>
-        <p class='typography-title-700 color-fg-hard mb-0.5'>
-          <%= number_to_currency(summary[:amount_in_cents] / 100.0, unit: "R$ ", separator: ",", delimiter: ".") %>
-        </p>
+        <%= render 'components/formatters/currency', value: summary[:amount_in_cents], class_style: 'typography-title-700 color-fg-hard mb-0.5' %>
         <span class='typography-label-900 color-fg-default'>
           <%= t("activerecord.models.deal.total_deals", count: summary[:quantity]) %>
         </span>
