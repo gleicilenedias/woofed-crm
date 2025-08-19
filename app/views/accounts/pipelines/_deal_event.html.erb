@@ -3,15 +3,13 @@
     <div class='w-4 h-4'>
       <i data-lucide="clock-4" class="w-4 h-4"></i>
     </div>
-    <span class='typography-body-800' data-controller="datetime--format-exhibition" data-datetime--format-exhibition-date-value="<%= event.primary_date %>" data-datetime--format-exhibition-type-value="distance" data-datetime--format-exhibition-locale-value="<%= current_user.language || '' %>">
-    </span>
+    <%= render "components/formartters/datetime", value: event.primary_date, type: "distance", class_style: 'typography-body-800' %>
   </div>
 <% else %>
   <div class='inline-flex gap-1 items-center color-fg-feedback-success h-5'>
     <div class='w-4 h-4'>
       <i data-lucide="clock-4" class="w-4 h-4"></i>
     </div>
-    <span class='typography-body-800' data-controller="datetime--format-exhibition" data-datetime--format-exhibition-date-value="<%= event.primary_date %>" data-datetime--format-exhibition-type-value="distance" data-datetime--format-exhibition-locale-value="<%= current_user.language || '' %>">
-    </span>
+    <%= render "components/formartters/datetime", value: event.primary_date, type: "distance", class_style: 'typography-body-800' %>
   </div>
 <% end %>
