@@ -16,7 +16,7 @@
     <div class="flex flex-col gap-1 lg:col-span-1">
       <%= form.label :currency_code, class: "typography-body-900 color-fg-default" %>
       <%= form.select :currency_code,
-          options_for_select(Money::Currency.table.map { |_k, v| ["#{v[:name]} - #{v[:iso_code]}", v[:iso_code]] }, form.object.currency_code),
+          options_for_select(Money::Currency.table.map { |_k, v| ["#{v[:name]} - #{v[:iso_code]}", v[:iso_code]] } .sort_by { |name, _code| name }, form.object.currency_code),
           {}, class: 'form-input' %>
     </div>
   </div>
