@@ -4,6 +4,7 @@
 #
 #  id                  :bigint           not null, primary key
 #  ai_usage            :jsonb            not null
+#  currency_code       :string           default("BRL"), not null
 #  name                :string           default(""), not null
 #  number_of_employees :string           default("1-10"), not null
 #  segment             :string           default("other"), not null
@@ -16,6 +17,7 @@ FactoryBot.define do
   factory :account do
     name { 'Account Testing' }
     site_url { 'https://woofedcrm.com' }
+    currency_code { Faker::Currency.code }
 
     before(:create) do |account, options|
       unless options.methods.include?(:run_embed_company_site) && options.run_embed_company_site
