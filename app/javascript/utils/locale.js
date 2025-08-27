@@ -7,3 +7,7 @@ export function getBrowserLocale() {
 export function getBrowserTimeZone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
+
+export function getUserLocale() {
+  return document.body.dataset.userLocale;
+}
