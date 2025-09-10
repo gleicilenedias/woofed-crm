@@ -225,7 +225,8 @@ RSpec.describe Accounts::ContactsController, type: :request do
         expect(response.body).to include(ERB::Util.html_escape(contact.email))
         expect(response.body).to include(ERB::Util.html_escape(deal.name))
         expect(response.body).to include(ERB::Util.html_escape(unassigned_deal.name))
-        expect(response.body).not_to include('chatwoot_conversation_link')
+        expect(response.body).not_to include('icon_chatwoot_conversation_link')
+        expect(response.body).not_to include('chatwoot-contact-section')
         expect(flash[:error]).to be_nil
       end
 
@@ -237,16 +238,24 @@ RSpec.describe Accounts::ContactsController, type: :request do
 
         before do
           user.reload
+          contact.update!(additional_attributes: { chatwoot_id: 'contact_chatwoot_id_123456',
+                                                   chatwoot_identifier: 'chatwoot_identifier_123456' },
+                                                  chatwoot_conversations_label_list: 'chatwoot_label_1, chatwoot_label_2')
         end
 
-        it 'shows chatwoot conversation link button' do
+        it 'shows chatwoot section' do
           get "/accounts/#{account.id}/contacts/#{contact.id}"
           expect(response).to have_http_status(:success)
           expect(response.body).to include(ERB::Util.html_escape(contact.full_name))
           expect(response.body).to include(ERB::Util.html_escape(contact.email))
           expect(response.body).to include(ERB::Util.html_escape(deal.name))
           expect(response.body).to include(ERB::Util.html_escape(unassigned_deal.name))
-          expect(response.body).to include('chatwoot_conversation_link')
+          expect(response.body).to include('icon_chatwoot_conversation_link')
+          expect(response.body).to include('text_chatwoot_conversation_link')
+          expect(response.body).to include('chatwoot-contact-section')
+          expect(response.body).to include(contact.additional_attributes['chatwoot_id'])
+          expect(response.body).to include(contact.additional_attributes['chatwoot_identifier'])
+          expect(response.body).to include(*contact.chatwoot_conversations_labels.pluck(:name))
           expect(flash[:error]).to be_nil
         end
       end
