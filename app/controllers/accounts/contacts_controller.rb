@@ -102,6 +102,7 @@ class Accounts::ContactsController < InternalController
   end
 
   def chatwoot_conversation_link
+    @display_format = params[:display_format].presence || 'icon'
     @chatwoot_conversation_link = Contact::Integrations::Chatwoot::GenerateConversationLink.new(@contact).call[:ok]
   rescue Faraday::TimeoutError, Faraday::ConnectionFailed
     @connection_error = true

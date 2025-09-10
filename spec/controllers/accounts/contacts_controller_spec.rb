@@ -496,11 +496,34 @@ RSpec.describe Accounts::ContactsController, type: :request do
               .and_return(double(call: { ok: link }))
           end
 
-          it 'assigns the conversation link and sets no error' do
-            get "/accounts/#{account.id}/contacts/#{contact.id}/chatwoot_conversation_link"
-            expect(response).to have_http_status(200)
-            expect(response.body).to include('Go to the last conversation')
-            expect(response.body).to include(link)
+          context 'when display_format param is "text"' do
+            it 'returns the conversation link in text format with no errors' do
+              get "/accounts/#{account.id}/contacts/#{contact.id}/chatwoot_conversation_link", params: { display_format: 'text' }
+              expect(response).to have_http_status(200)
+              expect(response.body).to include('text_chatwoot_conversation_link')
+              expect(response.body).to include('Go to the last conversation')
+              expect(response.body).to include(link)
+            end
+          end
+
+          context 'when display_format param is "icon"' do
+            it 'returns the conversation link in icon format with no errors' do
+              get "/accounts/#{account.id}/contacts/#{contact.id}/chatwoot_conversation_link", params: { display_format: 'icon' }
+              expect(response).to have_http_status(200)
+              expect(response.body).to include('icon_chatwoot_conversation_link')
+              expect(response.body).to include('Go to the last conversation')
+              expect(response.body).to include(link)
+            end
+          end
+
+          context 'when display_format param is not provided' do
+            it 'defaults to icon format and returns the conversation link with no errors' do
+              get "/accounts/#{account.id}/contacts/#{contact.id}/chatwoot_conversation_link"
+              expect(response).to have_http_status(200)
+              expect(response.body).to include('icon_chatwoot_conversation_link')
+              expect(response.body).to include('Go to the last conversation')
+              expect(response.body).to include(link)
+            end
           end
         end
         context 'when the Chatwoot conversation link is not generated successfully' do
