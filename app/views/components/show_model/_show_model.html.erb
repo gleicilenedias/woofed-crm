@@ -55,7 +55,7 @@
                 <p class='typography-body-900 color-fg-soft'>
                   <%= t("activerecord.attributes.#{model.model_name.i18n_key}.#{show_field}") %>
                 </p>
-                <% if show_field.in?([:label_list, :chatwoot_conversations_label_list]) %>
+                <% if show_field.in?([:label_list]) %>
                   <%= render 'components/list_labels', labels: model.send(show_field), max_width: '100%', justify_content: 'start' %>
                 <% elsif show_field.in?([:created_at, :updated_at]) %>
                   <%= render 'components/formatters/datetime', value: model.send(show_field), type: 'short', class_style: 'typography-body-900 color-fg-default break-all' %>

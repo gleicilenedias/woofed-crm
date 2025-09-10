@@ -9,7 +9,7 @@
           <% if link[:icon].include?('.svg') %>
             <%= embedded_svg(link[:icon] ) %>
           <% else %>
-            <i data-lucide=<%= link[:icon] %> ></i>
+            <i data-lucide=<%= link[:icon] %> class='<%= '-rotate-[101deg]' if link[:icon] == 'message-circle' %>' ></i>
           <% end %>
           <span class="hidden 2xl:block">
             <%= link[:label] %>
