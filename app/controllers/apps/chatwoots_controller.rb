@@ -21,7 +21,7 @@ class Apps::ChatwootsController < ActionController::Base
   def embedding_authenticate
     event = JSON.parse(params['event'])
     @user_email = event['data']['currentAgent']['email']
-    user = User.find_by(email: @user_email, account_id: @chatwoot.account_id)
+    user = User.find_by(email: @user_email)
     return render 'user_not_found', status: 400 if user.blank?
 
     sign_out_all_scopes
