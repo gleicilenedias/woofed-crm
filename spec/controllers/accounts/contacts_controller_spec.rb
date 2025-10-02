@@ -553,6 +553,19 @@ RSpec.describe Accounts::ContactsController, type: :request do
               expect(response.body).to include('Could not connect. Please try again.')
             end
           end
+          context 'when GenerateConversationLink raises a JSON::ParserError' do
+            before do
+              allow(Contact::Integrations::Chatwoot::GenerateConversationLink).to receive(:new)
+                .with(contact)
+                .and_raise(JSON::ParserError)
+            end
+
+            it 'sets chatwoot_conversation_link to nil and connection_error to true' do
+              get "/accounts/#{account.id}/contacts/#{contact.id}/chatwoot_conversation_link"
+              expect(response).to have_http_status(200)
+              expect(response.body).to include('Could not connect. Please try again.')
+            end
+          end
         end
       end
     end
