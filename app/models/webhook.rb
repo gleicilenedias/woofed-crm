@@ -37,7 +37,7 @@ class Webhook < ApplicationRecord
     return false if response.key?(:error)
 
     true
-  rescue Faraday::ConnectionFailed, Faraday::TimeoutError
+  rescue Faraday::ConnectionFailed, Faraday::TimeoutError, Faraday::SSLError
     false
   end
 
