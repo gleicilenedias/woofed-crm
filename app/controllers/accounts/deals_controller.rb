@@ -1,5 +1,6 @@
 class Accounts::DealsController < InternalController
   include DealProductConcern
+  include DealConcern
 
   before_action :set_deal,
                 only: %i[show edit update destroy events_to_do events_done deal_products deal_assignees]
@@ -182,10 +183,6 @@ class Accounts::DealsController < InternalController
 
   # Only allow a list of trusted parameters through.
   def deal_params
-    params.require(:deal).permit(
-      :name, :status, :stage_id, :contact_id, :position,
-      contact_attributes: %i[id full_name phone email],
-      custom_attributes: {}
-    )
+    params.require(:deal).permit(*permitted_deal_params)
   end
 end
