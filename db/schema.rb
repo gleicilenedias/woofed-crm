@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_04_171840) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_17_013421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_04_171840) do
     t.string "segment", default: "other", null: false
     t.string "number_of_employees", default: "1-10", null: false
     t.string "currency_code", default: "BRL", null: false
+    t.jsonb "settings", default: {}, null: false
   end
 
   create_table "action_text_rich_texts", force: :cascade do |t|
@@ -157,6 +158,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_04_171840) do
     t.index ["user_id"], name: "index_deal_assignees_on_user_id"
   end
 
+  create_table "deal_lost_reasons", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "deal_products", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "deal_id", null: false
@@ -185,6 +192,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_04_171840) do
     t.bigint "total_deal_products_amount_in_cents", default: 0, null: false
     t.datetime "lost_at"
     t.datetime "won_at"
+    t.string "lost_reason", default: "", null: false
     t.index ["contact_id"], name: "index_deals_on_contact_id"
     t.index ["created_by_id"], name: "index_deals_on_created_by_id"
     t.index ["pipeline_id"], name: "index_deals_on_pipeline_id"
