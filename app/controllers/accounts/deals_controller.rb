@@ -168,7 +168,7 @@ class Accounts::DealsController < InternalController
   end
 
   def mark_as_lost
-    @stages = Current.account.stages
+    @stages = Stage.all
     @lost_reasons = DealLostReason.order(:name).pluck(:name).uniq
   end
   private
