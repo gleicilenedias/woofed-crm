@@ -33,7 +33,7 @@ class Accounts::DealsController < InternalController
   # GET /deals/new
   def new
     @deal = Deal.new
-    @stages = current_user.account.stages
+    @stages = Stage.ordered_by_pipeline_and_position
     @deal.contact_id = params.dig(:deal, :contact_id)
 
     if @deal.contact_id.blank?
@@ -168,7 +168,7 @@ class Accounts::DealsController < InternalController
   end
 
   def mark_as_lost
-    @stages = Stage.all
+    @stages = Stage.ordered_by_pipeline_and_position
     @lost_reasons = DealLostReason.order(:name).pluck(:name).uniq
     @exists_deal_lost_reasons = DealLostReason.exists?
   end
