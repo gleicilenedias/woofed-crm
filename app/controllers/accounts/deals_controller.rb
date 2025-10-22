@@ -80,7 +80,7 @@ class Accounts::DealsController < InternalController
 
   # GET /deals/1/edit
   def edit
-    @stages = current_user.account.stages
+    @stages = Stage.ordered_by_pipeline_and_position
   end
 
   def edit_custom_attributes
@@ -90,7 +90,7 @@ class Accounts::DealsController < InternalController
 
   # POST /deals or /deals.json
   def create
-    @stages = current_user.account.stages
+    @stages = Stage.ordered_by_pipeline_and_position
     @deal = DealBuilder.new(current_user, deal_params).perform
 
     if Deal::CreateOrUpdate.new(@deal, deal_params).call
@@ -102,7 +102,7 @@ class Accounts::DealsController < InternalController
 
   # PATCH/PUT /deals/1 or /deals/1.json
   def update
-    @stages = @deal.pipeline.stages
+    @stages = Stage.ordered_by_pipeline_and_position
     if params[:deal][:att_key].present?
       @deal.custom_attributes[params[:deal][:att_key]] = params[:deal][:att_value]
     end
