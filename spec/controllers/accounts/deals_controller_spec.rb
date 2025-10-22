@@ -597,4 +597,30 @@ RSpec.describe Accounts::DealsController, type: :request do
       end
     end
   end
+
+  describe 'GET /accounts/{account.id}/deals/:id/mark_as_lost' do
+    let!(:deal) { create(:deal, stage:) }
+
+    context 'when it is an unauthenticated user' do
+      it 'returns unauthorized' do
+        get "/accounts/#{account.id}/deals/#{deal.id}/mark_as_lost"
+        expect(response).to redirect_to(new_user_session_path)
+      end
+    end
+
+    context 'when it is an authenticated user' do
+      let!(:deal_lost_reason) { create(:deal_lost_reason) }
+
+      before do
+        sign_in(user)
+      end
+
+      it 'returns deal_lost_reasons and mark as lost deals page' do
+        get "/accounts/#{account.id}/deals/#{deal.id}/mark_as_lost"
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include('Mark as Lost')
+        expect(response.body).to include(deal_lost_reason.name)
+      end
+    end
+  end
 end
