@@ -623,6 +623,18 @@ RSpec.describe Accounts::DealsController, type: :request do
         expect(response.body).to include(deal_lost_reason.name)
         expect(response.body).to include(stage.name)
       end
+
+      context 'when there is no deal lost reasons' do
+        before do
+          DealLostReason.destroy_all
+        end
+
+        it 'does not display deal lost reasons select' do
+          get "/accounts/#{account.id}/deals/#{deal.id}/mark_as_lost"
+          expect(response).to have_http_status(:success)
+          expect(response.body).not_to include(I18n.t('activerecord.models.deal.select_a_reason'))
+        end
+      end
     end
   end
 end

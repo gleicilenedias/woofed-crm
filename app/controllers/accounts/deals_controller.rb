@@ -170,7 +170,9 @@ class Accounts::DealsController < InternalController
   def mark_as_lost
     @stages = Stage.all
     @lost_reasons = DealLostReason.order(:name).pluck(:name).uniq
+    @exists_deal_lost_reasons = DealLostReason.exists?
   end
+
   private
 
   def set_deal

@@ -18,7 +18,7 @@
       </div>
       <div class="flex flex-col gap-1">
         <%= form.label :lost_reason, class: "typography-body-900 color-fg-default"  %>
-        <% if DealLostReason.exists? %>
+        <% if @exists_deal_lost_reasons %>
           <%= form.select(:lost_reason, @lost_reasons + [t('activerecord.models.other_option')], { include_blank: t('activerecord.models.deal.select_a_reason') }, { class: 'form-input', data: { deal_form__select_lost_reason_target: 'select', action: 'change->deal-form--select-lost-reason#toggle' } }) %>
         <% else %>
           <%= form.text_field :lost_reason, placeholder: DealLostReason.model_name.human(count: 1), class: 'form-input' %>
