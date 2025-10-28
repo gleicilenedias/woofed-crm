@@ -125,31 +125,3 @@
       <% end %>
   </script>
 <% end %>
-<% if ENV.fetch('OPENPANEL_ENDPOINT', 'https://api.openpanel.dev').present? && ENV.fetch('OPENPANEL_TOKEN', nil).present? && Rails.env.production? %>
-  <script src="https://openpanel.dev/op1.js" defer async></script>
-  <script>
-    window.op = window.op || function(...args){(window.op.q = window.op.q || []).push(args);};
-
-    window.op('init', {
-      apiUrl: '<%= ENV.fetch('OPENPANEL_ENDPOINT', 'https://api.openpanel.dev') %>',
-      clientId: '<%= ENV.fetch('OPENPANEL_TOKEN', nil) %>',
-      disabled: false,
-      trackScreenViews: true,
-      trackOutgoingLinks: true,
-      trackAttributes: true
-    });
-
-    <% if current_user.present? %>
-      window.op('identify', {
-        profileId: '<%= current_user.id %>',
-        firstName: '<%= current_user&.full_name %>',
-        email: '<%= current_user&.email %>',
-        properties: {
-          account_id: '<%= current_user&.account&.id %>',
-          account_name: '<%= current_user&.account&.name %>',
-          frontend_url: '<%= ENV.fetch("FRONTEND_URL", "") %>'
-        }
-      });
-    <% end %>
-  </script>
-<% end %>
