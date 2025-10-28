@@ -1,12 +1,16 @@
 import { Controller } from "stimulus";
 import { OpenPanel } from "@openpanel/web";
-import { getMetaJSON, getMetaContent, getRailsEnv } from "../../utils/meta";
+import {
+  getMetaJSON,
+  getMetaContent,
+  getRailsEnvironment,
+} from "../../utils/meta";
 
 export default class extends Controller {
   connect() {
     if (window.op) return;
 
-    const railsEnv = getRailsEnv();
+    const railsEnv = getRailsEnvironment();
     const endpoint = getMetaContent("openpanel-endpoint");
     const token = getMetaContent("openpanel-token");
 

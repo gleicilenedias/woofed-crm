@@ -13,6 +13,6 @@ export function getMetaContent(name) {
   return document.querySelector(`meta[name="${name}"]`)?.content || null;
 }
 
-export function getRailsEnv() {
-  return getMetaContent("rails-env");
+export function getRailsEnvironment() {
+  return getMetaContent("rails-environment");
 }
