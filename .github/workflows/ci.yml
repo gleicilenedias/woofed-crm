@@ -2,6 +2,9 @@ name: CI RSpec Tests
 
 on:
   pull_request:
+  push:
+    branches:
+      - development
 
 jobs:
   build:
