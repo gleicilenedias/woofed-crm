@@ -50,7 +50,7 @@
     <div class="hidden group-aria-[expanded=false]:block h-[1.5px] w-full bg-light-palette-p3"></div>
     <% menu_items.each do |item| %>
       <li>
-        <%= link_to(item[:path], class: "#{'button-menu-default-selected-md' if item[:active_if].call } button-menu-default-md w-full group-aria-[expanded=false]:w-10 group-aria-[expanded=false]:h-10", data: item[:link_data]) do %>
+        <%= link_to(item[:path], class: "#{'button-menu-default-selected-md' if item[:active_if].call } button-menu-default-md w-full group-aria-[expanded=false]:w-10 group-aria-[expanded=false]:h-10 group-aria-[expanded=false]:flex group-aria-[expanded=false]:items-center group-aria-[expanded=false]:justify-center group-aria-[expanded=false]:px-0", data: item[:link_data]) do %>
           <i data-lucide="<%= item[:icon] %>"></i>
           <span class="group-aria-[expanded=false]:hidden inline-block">
             <%= item[:label] %>
@@ -60,7 +60,7 @@
     <% end %>
     <div class="h-[1.5px] w-full bg-light-palette-p3"></div>
     <li class='mt-auto'>
-      <%= link_to(account_settings_path(Current.account), class: "#{'button-menu-default-selected-md' if request.path.include?('settings') } button-menu-default-md w-full group-aria-[expanded=false]:w-10 group-aria-[expanded=false]:h-10") do %>
+      <%= link_to(account_settings_path(Current.account), class: "#{'button-menu-default-selected-md' if request.path.include?('settings') } button-menu-default-md w-full group-aria-[expanded=false]:w-10 group-aria-[expanded=false]:h-10 group-aria-[expanded=false]:flex group-aria-[expanded=false]:items-center group-aria-[expanded=false]:justify-center group-aria-[expanded=false]:px-0") do %>
         <i data-lucide="bolt" ></i>
         <span class="group-aria-[expanded=false]:hidden inline-block">
           <%= t('views.layouts.shared.sidebar.company') %>
