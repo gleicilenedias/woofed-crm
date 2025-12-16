@@ -5,7 +5,7 @@ class Api::V1::Accounts::DealsController < Api::V1::InternalController
     @deal = Deal.find(params['id'])
 
     if @deal
-      render json: @deal, include: %i[contact stage pipeline deal_assignees], status: :ok
+      render json: @deal, include: %i[contact stage pipeline deal_assignees deal_products], status: :ok
     else
       render json: { errors: 'Not found' }, status: :not_found
     end

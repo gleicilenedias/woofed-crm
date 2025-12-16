@@ -6,6 +6,7 @@ RSpec.describe 'Deals API', type: :request do
   let!(:pipeline) { create(:pipeline, account:) }
   let!(:stage) { create(:stage, account:, pipeline:) }
   let!(:contact) { create(:contact, account:) }
+  let!(:product) { create(:product) }
   let(:deal) { create(:deal, account:, contact:, stage:) }
   let(:last_deal) { Deal.last }
   let(:last_event) { Event.last }
@@ -112,6 +113,7 @@ RSpec.describe 'Deals API', type: :request do
   describe 'GET /api/v1/accounts/:account_id/deals/:id' do
     let(:deal) { create(:deal, account:, contact:, stage:, pipeline:, name: 'Test Deal') }
     let!(:deal_assignee) { create(:deal_assignee, deal:, user:) }
+    let!(:deal_product) { create(:deal_product, deal:, product:) }
 
     context 'when it is an unauthenticated user' do
       it 'returns unauthorized' do
@@ -132,6 +134,8 @@ RSpec.describe 'Deals API', type: :request do
         expect(result['deal_assignees']).not_to be_empty
         expect(result['deal_assignees'].first['deal_id']).to eq(deal.id)
         expect(result['deal_assignees'].first['user_id']).to eq(user.id)
+        expect(result['deal_products'].first['deal_id']).to eq(deal.id)
+        expect(result['deal_products'].first['product_id']).to eq(product.id)
       end
 
       context 'when deal is not found' do
