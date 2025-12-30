@@ -11,6 +11,8 @@ RSpec.describe Accounts::DealsController, type: :request do
   let(:last_event) { Event.last }
   let(:last_deal) { Deal.last }
   let(:last_deal_assignee) { DealAssignee.last }
+  let(:custom_won_at) { Time.zone.parse('2025-01-15 10:30:00') }
+  let(:custom_lost_at) { Time.zone.parse('2022-01-15 10:30:00') }
 
   describe 'POST /accounts/{account.id}/deals' do
     context 'when it is an unauthenticated user' do
@@ -196,18 +198,17 @@ RSpec.describe Accounts::DealsController, type: :request do
       end
 
       context 'when deal is lost' do
-        let(:lost_at) { Time.zone.parse('2025-01-15 10:30:00') }
         let(:lost_reason) { 'test lost reason' }
 
         let(:deal) do
-          create(:deal, :lost, stage:, creator: user, lost_reason: lost_reason,
-                              lost_at: lost_at)
+          create(:deal, :lost, stage:, creator: user, lost_reason:,
+                               lost_at: custom_lost_at)
         end
 
         it 'show lost at date and lost reason' do
           get "/accounts/#{account.id}/deals/#{deal.id}"
           expect(response).to have_http_status(:success)
-          expect(response.body).to include(lost_at.to_s)
+          expect(response.body).to include(custom_lost_at.to_s)
           expect(response.body).to include(lost_reason)
           expect(response.body).to include(I18n.t('activerecord.attributes.deal.lost_at'))
           expect(response.body).not_to include(I18n.t('activerecord.attributes.deal.won_at'))
@@ -215,18 +216,16 @@ RSpec.describe Accounts::DealsController, type: :request do
       end
 
       context 'when deal is won' do
-        let(:won_at) { Time.zone.parse('2025-02-20 15:45:00') }
-
         let(:deal) do
           create(:deal, :won, stage:, creator: user,
-                              won_at: won_at)
+                              won_at: custom_won_at)
         end
 
         it 'show won at date' do
           get "/accounts/#{account.id}/deals/#{deal.id}"
 
           expect(response).to have_http_status(:success)
-          expect(response.body).to include(won_at.to_s)
+          expect(response.body).to include(custom_won_at.to_s)
           expect(response.body).to include(I18n.t('activerecord.attributes.deal.won_at'))
           expect(response.body).not_to include(I18n.t('activerecord.attributes.deal.lost_at'))
         end
@@ -262,8 +261,7 @@ RSpec.describe Accounts::DealsController, type: :request do
   end
 
   describe 'GET /accounts/{account.id}/deals/:id/edit' do
-    let!(:deal) { create(:deal, :lost, stage:, contact:, creator: user, lost_reason: 'test lost reason',
-                           lost_at: Time.zone.parse('2024-01-15 10:30:00')) }
+    let!(:deal) { create(:deal, stage:, contact:, creator: user) }
 
     context 'when it is an unauthenticated user' do
       it 'returns unauthorized' do
@@ -281,23 +279,80 @@ RSpec.describe Accounts::DealsController, type: :request do
         get "/accounts/#{account.id}/deals/#{deal.id}/edit"
         expect(response).to have_http_status(:success)
         expect(response.body).not_to include('Created by')
-        expect(response.body).not_to include('Lost at')
         expect(flash[:error]).to be_nil
       end
 
       context 'when deal is won' do
         let(:deal) do
-          create(:deal, :lost, stage:, creator: user,
-                              won_at: Time.zone.parse('2025-01-15 10:30:00'))
+          create(:deal, :won, stage:, creator: user,
+                              won_at: custom_won_at)
         end
 
-        it 'show won at field date' do
-          won_deal = create(:deal, :won, stage:, creator: user,
-                                       won_at: Time.zone.parse('2025-02-20 15:45:00'))
-          get "/accounts/#{account.id}/deals/#{won_deal.id}"
+        context 'when allow_edit_lost_at_won_at is enabled' do
+          before do
+            account.update(settings: { allow_edit_lost_at_won_at: true })
+          end
 
-          expect(response).to have_http_status(:success)
-          expect(response.body).to include('Won at')
+          it 'show won at field date' do
+            get "/accounts/#{account.id}/deals/#{deal.id}/edit"
+
+            expect(response).to have_http_status(:success)
+            expect(response.body).to include(I18n.t('activerecord.attributes.deal.won_at'))
+            expect(response.body).to include(custom_won_at.strftime('%Y-%m-%dT%H:%M:%S'))
+            expect(response.body).not_to include(I18n.t('activerecord.attributes.deal.lost_at'))
+            expect(response.body).not_to include(custom_lost_at.strftime('%Y-%m-%dT%H:%M:%S'))
+          end
+        end
+
+        context 'when allow_edit_lost_at_won_at is disabled' do
+          before do
+            account.update(settings: { allow_edit_lost_at_won_at: false })
+          end
+
+          it 'does not show show won at field date' do
+            get "/accounts/#{account.id}/deals/#{deal.id}/edit"
+
+            expect(response).to have_http_status(:success)
+            expect(response.body).not_to include(I18n.t('activerecord.attributes.deal.won_at'))
+            expect(response.body).not_to include(custom_won_at.strftime('%Y-%m-%dT%H:%M:%S'))
+          end
+        end
+      end
+
+      context 'when deal is lost' do
+        let(:deal) do
+          create(:deal, :lost, stage:, creator: user,
+                               lost_at: custom_lost_at, lost_reason: 'Lost reason test 123')
+        end
+
+        context 'when allow_edit_lost_at_won_at is enabled' do
+          before do
+            account.update(settings: { allow_edit_lost_at_won_at: true })
+          end
+
+          it 'show lost at field date' do
+            get "/accounts/#{account.id}/deals/#{deal.id}/edit"
+
+            expect(response).to have_http_status(:success)
+            expect(response.body).to include(I18n.t('activerecord.attributes.deal.lost_at'))
+            expect(response.body).to include(custom_lost_at.strftime('%Y-%m-%dT%H:%M:%S'))
+            expect(response.body).not_to include(I18n.t('activerecord.attributes.deal.won_at'))
+            expect(response.body).not_to include(custom_won_at.strftime('%Y-%m-%dT%H:%M:%S'))
+          end
+        end
+
+        context 'when allow_edit_lost_at_won_at is disabled' do
+          before do
+            account.update(settings: { allow_edit_lost_at_won_at: false })
+          end
+
+          it 'does not show lost at field date' do
+            get "/accounts/#{account.id}/deals/#{deal.id}/edit"
+
+            expect(response).to have_http_status(:success)
+            expect(response.body).not_to include(I18n.t('activerecord.attributes.deal.lost_at'))
+            expect(response.body).not_to include(custom_lost_at.strftime('%Y-%m-%dT%H:%M:%S'))
+          end
         end
       end
     end
