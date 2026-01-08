@@ -2,11 +2,7 @@ class Api::V1::Accounts::ContactsController < Api::V1::InternalController
   before_action :set_contact, only: %i[show destroy]
 
   def show
-    if @contact
-      render json: @contact, include: %i[deals events], status: :ok
-    else
-      render json: { errors: 'Not found' }, status: :not_found
-    end
+    render json: @contact, include: %i[deals events], status: :ok
   end
 
   def create

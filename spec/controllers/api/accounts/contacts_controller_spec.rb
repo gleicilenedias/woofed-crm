@@ -32,6 +32,13 @@ RSpec.describe 'Contacts API', type: :request do
         expect(result['deals'].map { |d| d['name'] }).to include('Test Deal')
         expect(result['events'].map { |e| e['title'] }).to include('Test Event')
       end
+
+      it 'returns not found when contact does not exist' do
+        get "/api/v1/accounts/#{account.id}/contacts/99999", headers: auth_headers
+        expect(response).to have_http_status(:not_found)
+        result = JSON.parse(response.body)
+        expect(result['error']).to eq('Resource could not be found')
+      end
     end
   end
 
