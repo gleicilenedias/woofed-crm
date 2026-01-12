@@ -1,0 +1,9 @@
+en:
+  views:
+    accounts:
+      advanced_searches:
+        title: Search
+        placeholder: Search contacts, deals, products...
+        no_results: No results found
+        filters:
+          all: All

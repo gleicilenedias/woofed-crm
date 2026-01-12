@@ -1,0 +1,9 @@
+es:
+  views:
+    accounts:
+      advanced_searches:
+        title: Buscar
+        placeholder: Buscar contactos, oportunidades, productos...
+        no_results: No se encontraron resultados
+        filters:
+          all: Todo

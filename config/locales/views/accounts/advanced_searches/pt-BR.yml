@@ -1,0 +1,9 @@
+pt-BR:
+  views:
+    accounts:
+      advanced_searches:
+        title: Buscar
+        placeholder: Buscar contatos, negócios, produtos...
+        no_results: Nenhum resultado encontrado
+        filters:
+          all: Todos

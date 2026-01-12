@@ -1,0 +1,27 @@
+<%= f.hidden_field :search_type, value: "", data: { form__advanced_search_target: :searchTypeField } %>
+<div class="flex gap-2 mb-4 flex-wrap">
+  <%= link_to "",
+        class: "advanced-search-filter-button",
+        data: {
+          form__advanced_search_target: :filterButton,
+          action: 'click->form--advanced-search#selectFilter',
+          value: ''
+        },
+        aria: { selected: true } do %>
+    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+    <%= t('views.accounts.advanced_searches.filters.all') %>
+  <% end %>
+  <% search_types.each do |search_type| %>
+    <%= link_to "",
+          class: "advanced-search-filter-button",
+          data: {
+            form__advanced_search_target: :filterButton,
+            action: 'click->form--advanced-search#selectFilter',
+            value: search_type[:value]
+          },
+          aria: { selected: false } do %>
+      <i data-lucide="<%= search_type[:icon] %>" class="w-4 h-4"></i>
+      <%= search_type[:label] %>
+    <% end %>
+  <% end %>
+</div>
