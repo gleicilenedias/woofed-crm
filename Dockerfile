@@ -12,7 +12,7 @@ RUN apt-get update -qq \
         graphviz \
         netcat-traditional software-properties-common \
         imagemagick libvips libvips-dev libvips-tools
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - \
         && apt-get install -y nodejs npm && npm install --global yarn
 
 RUN npm config get registry prints: https://registry.npmjs.org

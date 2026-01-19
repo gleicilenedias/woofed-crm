@@ -20,7 +20,7 @@ You can try the development version through the link: [WoofedCRM](https://woofed
 Requeriments for project:
 ```
 ruby 3.3.4
-nodejs 16.16.0
+nodejs 22.13.0
 ```
 
 1 - Clone repository

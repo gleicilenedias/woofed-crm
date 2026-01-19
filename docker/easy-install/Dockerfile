@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y \
   postgresql-16 \
   postgresql-16-pgvector
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - \
   && apt-get install -y nodejs && npm install --global yarn
 
 RUN ruby -v
