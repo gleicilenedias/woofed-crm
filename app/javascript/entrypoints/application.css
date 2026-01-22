@@ -2,7 +2,7 @@
 @import "../../assets/stylesheets/index.scss";
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Philosopher:wght@700&display=swap");
 @import "@yaireo/tagify/dist/tagify.css";
-@import "lightgallery.js/dist/css/lightgallery.css";
+@import "lightgallery/css/lightgallery.css";
 @import "apexcharts/src/assets/apexcharts.css";
 @import "apexcharts/dist/apexcharts.css";
 @import "daterangepicker/daterangepicker.css";
