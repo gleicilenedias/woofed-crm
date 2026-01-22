@@ -33,7 +33,7 @@ COPY . ./
 RUN yarn build
 RUN yarn install --check-files
 
-# Precompile Rails assets (plus Webpack)
+# Precompile Rails assets (Vite)
 RUN bundle exec rake assets:precompile
 
 # Install node dependences

@@ -1,7 +1,6 @@
-// This file is automatically compiled by Webpack, along with any other files
-// present in this directory. You're encouraged to place your actual application logic in
-// a relevant structure within app/javascript and only use these pack files to reference
-// that code so it'll be compiled.
+// This file is the main entrypoint for Vite.
+// Place your actual application logic in a relevant structure within app/javascript
+// and import it here.
 
 import jquery from "jquery";
 window.jQuery = jquery;
