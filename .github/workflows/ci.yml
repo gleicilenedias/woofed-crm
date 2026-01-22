@@ -33,7 +33,7 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: '16.16.0'
+          node-version: '22.13.0'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Load Env variables
