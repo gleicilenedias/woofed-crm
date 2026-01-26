@@ -1,8 +1,8 @@
 import { Controller } from "@hotwired/stimulus";
 import moment from "moment-timezone";
 import "moment/min/locales";
-import "moment-timezone/node_modules/moment/locale/es";
-import "moment-timezone/node_modules/moment/locale/pt-br";
+import "moment/dist/locale/es";
+import "moment/dist/locale/pt-br";
 import {
   getBrowserLocale,
   getBrowserTimeZone,
