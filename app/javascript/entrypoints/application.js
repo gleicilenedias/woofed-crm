@@ -31,6 +31,7 @@
 import jquery from "jquery";
 window.jQuery = jquery;
 window.$ = jquery;
+
 import Rails from "@rails/ujs";
 import "@hotwired/turbo-rails";
 import * as ActiveStorage from "@rails/activestorage";
@@ -77,17 +78,6 @@ $(document).on("turbo:frame-render", function (e) {
 function initLibraries() {
   initFlowbite();
   lucide.createIcons();
-  // Daterangepicker
-  if (jQuery().daterangepicker) {
-    if ($(".datetimepicker").length) {
-      $(".datetimepicker").daterangepicker({
-        locale: { format: "YYYY-MM-DD HH:mm" },
-        singleDatePicker: true,
-        timePicker: true,
-        timePicker24Hour: true,
-      });
-    }
-  }
 }
 
 setBrowserTimezoneCookie();

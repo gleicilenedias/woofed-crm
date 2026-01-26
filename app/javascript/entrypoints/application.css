@@ -5,7 +5,6 @@
 @import "lightgallery.js/dist/css/lightgallery.css";
 @import "apexcharts/src/assets/apexcharts.css";
 @import "apexcharts/dist/apexcharts.css";
-@import "daterangepicker/daterangepicker.css";
 
 input[type="file"]::file-selector-button {
   background-color: #faf9fd;

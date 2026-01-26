@@ -1,0 +1,305 @@
+/* Flatpickr custom theme to match Woofed CRM design */
+
+.flatpickr-calendar {
+  font-family: "Nunito", sans-serif;
+  background: #ffffff;
+  border: 1px solid #e7e6ef;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(23, 22, 30, 0.1);
+  padding: 0;
+  width: auto;
+  min-width: 320px;
+
+  &.showTimeInput.hasTime {
+    .flatpickr-time {
+      border-top: 1px solid #e7e6ef;
+    }
+  }
+
+  &.multiMonth {
+    width: auto;
+  }
+}
+
+.flatpickr-months {
+  padding: 12px 8px 8px;
+
+  .flatpickr-month {
+    height: 36px;
+  }
+
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    padding: 8px;
+    fill: #605e70;
+    transition: all 0.2s ease;
+
+    &:hover {
+      fill: #6857d9;
+
+      svg {
+        fill: #6857d9;
+      }
+    }
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .flatpickr-current-month {
+    font-size: 14px;
+    font-weight: 600;
+    color: #17161e;
+    padding-top: 4px;
+
+    .cur-month {
+      font-weight: 600;
+    }
+
+    .numInputWrapper {
+      width: 60px;
+
+      input.cur-year {
+        font-weight: 600;
+        color: #17161e;
+      }
+
+      span {
+        border-color: #888599;
+
+        &:hover {
+          background: #edf1fd;
+        }
+      }
+    }
+  }
+}
+
+.flatpickr-weekdays {
+  background: #faf9fd;
+  border-bottom: 1px solid #e7e6ef;
+  padding: 8px 0;
+}
+
+.flatpickr-weekday {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888599;
+  text-transform: uppercase;
+}
+
+.flatpickr-days {
+  padding: 8px;
+
+  .dayContainer {
+    min-width: 280px;
+    max-width: 280px;
+  }
+}
+
+.flatpickr-day {
+  font-size: 13px;
+  font-weight: 500;
+  color: #3a3847;
+  border-radius: 6px;
+  height: 36px;
+  line-height: 36px;
+  max-width: 36px;
+  margin: 2px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #edf1fd;
+    border-color: #edf1fd;
+    color: #6857d9;
+  }
+
+  &.today {
+    border-color: #6857d9;
+    color: #6857d9;
+    font-weight: 700;
+
+    &:hover {
+      background: #6857d9;
+      color: #ffffff;
+    }
+  }
+
+  &.selected,
+  &.startRange,
+  &.endRange {
+    background: #6857d9 !important;
+    border-color: #6857d9 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+
+    &:hover {
+      background: #8686e8 !important;
+      border-color: #8686e8 !important;
+    }
+  }
+
+  &.inRange {
+    background: #edf1fd;
+    border-color: #edf1fd;
+    color: #6857d9;
+    box-shadow: -5px 0 0 #edf1fd, 5px 0 0 #edf1fd;
+  }
+
+  &.prevMonthDay,
+  &.nextMonthDay {
+    color: #cbc8db;
+
+    &:hover {
+      background: #f2f1f7;
+      border-color: #f2f1f7;
+      color: #888599;
+    }
+  }
+
+  &.disabled,
+  &.disabled:hover {
+    color: #e7e6ef;
+    background: transparent;
+    cursor: not-allowed;
+  }
+
+  &.week.selected {
+    border-radius: 0;
+    box-shadow: -5px 0 0 #6857d9, 5px 0 0 #6857d9;
+  }
+}
+
+.flatpickr-time {
+  padding: 12px;
+  background: #faf9fd;
+  border-radius: 0 0 8px 8px;
+
+  .numInputWrapper {
+    height: 36px;
+    background: #ffffff;
+    border: 1px solid #e7e6ef;
+    border-radius: 6px;
+
+    input {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3a3847;
+    }
+
+    span {
+      border-color: #cbc8db;
+
+      &:hover {
+        background: #edf1fd;
+      }
+
+      &.arrowUp:after {
+        border-bottom-color: #605e70;
+      }
+
+      &.arrowDown:after {
+        border-top-color: #605e70;
+      }
+    }
+  }
+
+  .flatpickr-time-separator,
+  .flatpickr-am-pm {
+    color: #605e70;
+    font-weight: 500;
+  }
+
+  .flatpickr-am-pm {
+    background: #ffffff;
+    border: 1px solid #e7e6ef;
+    border-radius: 6px;
+    font-size: 13px;
+
+    &:hover {
+      background: #edf1fd;
+      color: #6857d9;
+    }
+  }
+}
+
+/* Input styling */
+.flatpickr-input {
+  font-family: "Nunito", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3a3847;
+  background: #faf9fd;
+  border: 1.5px solid #e7e6ef;
+  border-radius: 6px;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #cbc8db;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #6857d9;
+    box-shadow: 0 0 0 3px rgba(104, 87, 217, 0.1);
+  }
+
+  &::placeholder {
+    color: #b1aec2;
+  }
+}
+
+/* Quick select buttons panel */
+.flatpickr-quick-select {
+  background: #faf9fd;
+  border-radius: 0 0 8px 8px;
+
+  button {
+    font-family: "Nunito", sans-serif;
+    cursor: pointer;
+    border: none;
+    outline: none;
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(104, 87, 217, 0.2);
+    }
+  }
+}
+
+/* Range mode specific styles */
+.flatpickr-calendar.rangeMode {
+  .flatpickr-day {
+    &.startRange {
+      border-radius: 6px 0 0 6px;
+    }
+
+    &.endRange {
+      border-radius: 0 6px 6px 0;
+    }
+
+    &.startRange.endRange {
+      border-radius: 6px;
+    }
+  }
+}
+
+/* Animation */
+.flatpickr-calendar.animate.open {
+  animation: flatpickrFadeIn 0.2s ease-out;
+}
+
+@keyframes flatpickrFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
