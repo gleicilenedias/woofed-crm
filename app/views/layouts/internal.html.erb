@@ -8,9 +8,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= action_cable_meta_tag %>
-    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload", media: 'all' %>
-    <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_pack_tag 'application', defer: true, 'data-turbo-track': 'reload' %>
+    <%= vite_stylesheet_tag 'application', 'data-turbolinks-track': 'reload', media: 'all' %>
+    <%= vite_javascript_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= tag.meta name: "vapid-public-key", content: Rails.configuration.x.vapid.public_key %>
     <%= tag.meta name: "openpanel-token", content: ENV.fetch("OPENPANEL_TOKEN", "") %>
     <%= tag.meta name: "openpanel-endpoint", content: ENV.fetch("OPENPANEL_ENDPOINT", "https://api.openpanel.dev") %>
