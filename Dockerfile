@@ -13,7 +13,9 @@ RUN apt-get update -qq \
         netcat-traditional software-properties-common \
         imagemagick libvips libvips-dev libvips-tools
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - \
-        && apt-get install -y nodejs npm && npm install --global yarn
+    && apt-get update \
+    && apt-get install -y nodejs \
+    && npm install -g yarn
 
 RUN npm config get registry prints: https://registry.npmjs.org
 
