@@ -1,6 +1,6 @@
 FROM ruby:3.3.4-slim-bullseye
 
-# Instala Git e dependências de banco de dados
+# Instala dependências do sistema
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
     build-essential \
@@ -10,13 +10,22 @@ RUN apt-get update -qq && \
     npm && \
     npm install -g yarn
 
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos de dependências primeiro
+# Copia Gemfile e Gemfile.lock para instalar as gems
 COPY Gemfile Gemfile.lock ./
+
+# Instala as gems do Bundler
 RUN gem install bundler:2.5.17 && bundle install
 
-# Copia TODO o restante do código para dentro de /app
+# Copia package.json e yarn.lock para instalar as dependências Node.js
+COPY package.json yarn.lock ./
+
+# Instala as dependências Node.js
+RUN yarn install --frozen-lockfile
+
+# Copia o restante do código da aplicação
 COPY . .
 
 # Garante que o diretório de trabalho seja /app para os comandos seguintes
