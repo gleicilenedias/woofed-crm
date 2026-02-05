@@ -2,7 +2,9 @@
 FROM ruby:3.3.4-slim-bullseye
 
 # Instala dependências do sistema
-RUN apt-get update -qq &#x26;&#x26; apt-get install -y nodejs npm yarn postgresql-client build-essential git libvips
+RUN apt-get update -qq
+RUN apt-get install -y nodejs npm yarn postgresql-client build-essential git libvips
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
