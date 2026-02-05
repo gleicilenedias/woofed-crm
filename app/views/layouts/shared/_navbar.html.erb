@@ -1,37 +1,14 @@
-<% if controller_path == 'accounts/pipelines' && ['index', 'show', 'edit', 'new'].include?(action_name) %>
-  <%= render "layouts/shared/navbar_pipe" %>
-<% elsif controller_path == 'accounts/deals' && ['show'].include?(action_name) %>
-  <%= render "layouts/shared/navbar_show_deal" %>
-<% elsif controller_path == 'accounts/deals' && ['show'].exclude?(action_name) %>
-  <%= render "layouts/shared/navbar_deal" %>
-<% elsif controller_path == 'accounts/contacts' %>
-  <%= render "layouts/shared/navbar_contact" %>
-<% elsif controller_path == 'accounts/settings' %>
-  <%= render "layouts/shared/navbar_setting" %>
-<% elsif controller_path == 'accounts/settings/custom_attributes_definitions'  %>
-  <%= render "layouts/shared/navbar_custom_attributes_definitions" %>
-<% elsif controller_path == 'accounts/apps/chatwoots'  %>
-  <%= render "layouts/shared/navbar_chatwoot" %>
-<% elsif controller_path == "accounts/settings/webhooks"  %>
-  <%= render "layouts/shared/navbar_webhook" %>
-<% elsif controller_path == 'accounts/users'  %>
-  <%= render "layouts/shared/navbar_users" %>
-<% elsif controller_path == 'accounts/apps/evolution_apis'  %>
-  <%= render "layouts/shared/navbar_evolution_api" %>
-<% elsif controller_path == 'accounts/products'  %>
-  <%= render "layouts/shared/navbar_product" %>
-<% elsif controller_path == 'accounts/reports'  %>
-  <%= render "layouts/shared/navbar_reports" %>
-<% elsif controller_path == 'accounts/events'  %>
-  <%= render "layouts/shared/navbar_events" %>
-<% elsif controller_path == 'accounts/welcome' %>
-  <%= render "layouts/shared/navbar_welcome" %>
-<% elsif controller_path == 'accounts/apps/ai_assistents' %>
-  <%= render "layouts/shared/navbar_ai_assistents" %>
-<% elsif controller_path == "accounts/settings/accounts" %>
-  <%= render "layouts/shared/navbar_settings_accounts" %>
-<% elsif controller_path == "accounts/settings/deals/deal_lost_reasons" %>
-  <%= render "layouts/shared/navbar_settings_deal_lost_reason" %>
-<% elsif controller_path == "accounts/settings/deals" %>
-  <%= render "layouts/shared/navbar_settings_deal" %>
-<% end %>
+<div class="flex items-center gap-2">
+  <% if current_user %>
+    <div data-controller="theme">
+      <button type="button" data-action="theme#toggle"
+              class="button-default-blank-secondary-icon-only-md">
+        <svg data-theme-target="sunIcon" data-lucide="sun" class="lucide lucide-sun"></svg>
+        <svg data-theme-target="moonIcon" data-lucide="moon" class="lucide lucide-moon hidden"></svg>
+      </button>
+    </div>
+    <%= render 'components/navs/user_menu' %>
+  <% else %>
+    <%= link_to t('views.devise.sessions.new.log_in'), new_user_session_path, class: 'btn-primary' %>
+  <% end %>
+</div>

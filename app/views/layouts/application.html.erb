@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html data-controller="theme">
   <head>
     <title>Woofed CRM</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= vite_client_tag %>
-    <%= vite_stylesheet_tag 'application', 'data-turbolinks-track': 'reload', media: 'all' %>
-    <%= vite_javascript_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= render "layouts/shared/analytics_scripts" %>
+    <%= vite_javascript_tag 'application' %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <meta name="openpanel-endpoint" content="<%= ENV['OPENPANEL_API_URL'] %>">
+    <meta name="openpanel-token" content="<%= ENV['OPENPANEL_CLIENT_ID'] %>">
+    <meta name="user-data" content="<%= current_user_json %>">
+    <meta name="rails-environment" content="<%= Rails.env %>">
+    <meta name="vapid-public-key" content="<%= ENV['VAPID_PUBLIC_KEY'] %>">
+    <script>
+      // Aplica imediatamente o tema do localStorage para evitar FOUC (Flash of Unstyled Content)
+      (function() {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
   </head>
-  <body>
-    <%= render "layouts/shared/analytics_scripts_body" %>
+  <body data-user-locale="<%= I18n.locale %>" data-account-currency="<%= Current.account&.currency_code %>">
+    <%= render 'layouts/shared/analytics_scripts' %>
+    <%= render 'layouts/shared/flash_message' %>
     <%= yield %>
+    <%= render 'layouts/shared/analytics_scripts_body' %>
   </body>
 </html>
