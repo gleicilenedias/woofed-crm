@@ -3,7 +3,7 @@ FROM ruby:3.3.4-slim-bullseye
 
 # Instala dependências do sistema
 RUN apt-get update -qq && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm yarn postgresql-client build-essential git libvips && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm yarn postgresql-client libpq-dev build-essential git libvips && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Define o diretório de trabalho dentro do contêiner
