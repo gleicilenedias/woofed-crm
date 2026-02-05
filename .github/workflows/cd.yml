@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - master  # Adicionei master caso seu fork antigo use esse nome
+      - master
       - development
 
 jobs:
@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # Necessário para publicar no GHCR
+      packages: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # Versão mais atualizada
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -38,7 +38,5 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64
           push: true
-          # Aqui ele cria a tag automática: ghcr.io/gleicilenedias/woofed-crm:latest
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/gleicilenedias/woofed-crm:latest
